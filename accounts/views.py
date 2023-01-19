@@ -80,6 +80,7 @@ class VerificationCodeCheck(generics.GenericAPIView):
         user = request.user
         if request.data.get('code') == user.verification_code:
             user.email_verified = True
+            """"""
             return Response({'user': 'verified'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'incorrect code'}, status=status.HTTP_400_BAD_REQUEST)
