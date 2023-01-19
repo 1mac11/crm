@@ -1,0 +1,16 @@
+version: '2.0'
+
+services:
+  db:
+    image: postgres:13-alpine
+    container_name: database
+    env_file:
+      - .env
+    volumes:
+      - pg_data:/var/lib/postgresql
+    restart: always
+    ports:
+      - '5434:5432'
+
+volumes:
+  pg_data:
