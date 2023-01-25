@@ -1,31 +1,22 @@
-from django.core.mail import send_mail
-from rest_framework import generics, status, views, permissions
+from rest_framework import generics, status, views, permissions, viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-
 from .models import User
-from .serializers import RegisterSerializer, LoginSerializer, LogoutSerializer, VerifyEmailSerializer, \
-    VerificationCodeCheckSerializer
+from accounts import serializers
 
-
-# Create your views here.
 
 class RegisterView(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
+    serializer_class = serializers.RegisterSerializer
 
     def post(self, request):
-        user = request.data
-        serializer = self.serializer_class(data=user)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        user_data = serializer.data
-        return Response(user_data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
+    serializer_class = serializers.LoginSerializer
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -34,9 +25,8 @@ class LoginAPIView(generics.GenericAPIView):
 
 
 class LogoutAPIView(generics.GenericAPIView):
-    serializer_class = LogoutSerializer
-
-    # permission_classes = (permissions.IsAuthenticated,)  # Elbekdan so'rimiz
+    serializer_class = serializers.LogoutSerializer
+    permission_classes = (permissions.IsAuthenticated,)  # Elbekdan so'rimiz
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -45,24 +35,16 @@ class LogoutAPIView(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
-
 class VerifyEmail(generics.GenericAPIView):
-    serializer_class = VerifyEmailSerializer
+    serializer_class = serializers.VerifyEmailSerializer
 
     def post(self, request):
         email = request.data.get('email')
         if email in User.objects.values_list('email', flat=True):
-            user = User.objects.get(email='user@example.com')
+            user = User.objects.get(email=email)
+            user.set_code()
 
-            # send mail to user.email
-            # send_mail(
-            #     'Verification code',
-            #     f'{user.verification_code}',
-            #     'from@example.com',
-            #     [f'{email}'],
-            #     fail_silently=False,
-            # )
+            # send mail to user.email not implemented yet
 
             return Response({f'{email}': 'exists',
                              'message': 'Please check your email adress for verification code'},
@@ -74,26 +56,59 @@ class VerifyEmail(generics.GenericAPIView):
 
 
 class VerificationCodeCheck(generics.GenericAPIView):
-    serializer_class = VerificationCodeCheckSerializer
+    serializer_class = serializers.VerificationCodeCheckSerializer
 
     def post(self, request):
-        user = request.user
+        email = request.data.get('email')
+        user = User.objects.get(email=email)
+
         if request.data.get('code') == user.verification_code:
             user.email_verified = True
-            """"""
+            user.verification_code = ''
+            user.save()
             return Response({'user': 'verified'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'incorrect code'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def password_reset(request):
-    data = request.data
-    if data['password'] == data['password_confirm']:
-        user = request.user
-        user = User.objects.get(id=user.id)
-        user.password = data['password']
-        return Response({"message": "You successfully changed your password"}, status=200)
-    else:
-        return Response({"message": "Please chech that the new password and password confirmation are the same"},
-                        status=400)
+class ForgotPassword(generics.GenericAPIView):
+    serializer_class = serializers.ForgotPasswordSerializer
+
+    def post(self, request):
+        res = VerifyEmail().post(request)
+        return res
+
+
+class SetNewPassword(generics.GenericAPIView):
+    serializer_class = serializers.NewPasswordSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class UserDetailView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.UserDetailSerializer
+
+    def get(self, request):
+        serializer = serializers.UserDetailSerializer(request.user)
+        return Response(serializer.data)
+
+
+class UserUpdateView(generics.GenericAPIView):
+    serializer_class = serializers.UserUpdateSerializer
+    permission_classes = [IsAuthenticated]
+    def patch(self, request):
+        data = self.serializer_class.validate(serializers.UserUpdateSerializer(), request.data)
+        user = User.objects.get(id=request.user.id)
+        for attr in data:
+            if attr == 'email' and data['email'] != user.email:
+                user.email_verified = False
+            user.__setattr__(attr, data[attr])
+
+        user.save()
+
+        return Response(data)
