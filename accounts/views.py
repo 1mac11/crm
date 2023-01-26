@@ -35,7 +35,7 @@ class LogoutAPIView(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class VerifyEmail(generics.GenericAPIView):
+class VerifyEmailAPIView(generics.GenericAPIView):
     serializer_class = serializers.VerifyEmailSerializer
 
     def post(self, request):
@@ -55,7 +55,7 @@ class VerifyEmail(generics.GenericAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class VerificationCodeCheck(generics.GenericAPIView):
+class VerificationCodeCheckAPIView(generics.GenericAPIView):
     serializer_class = serializers.VerificationCodeCheckSerializer
 
     def post(self, request):
@@ -71,15 +71,15 @@ class VerificationCodeCheck(generics.GenericAPIView):
             return Response({'message': 'incorrect code'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ForgotPassword(generics.GenericAPIView):
+class ForgotPasswordAPIView(generics.GenericAPIView):
     serializer_class = serializers.ForgotPasswordSerializer
 
     def post(self, request):
-        res = VerifyEmail().post(request)
+        res = VerifyEmailAPIView().post(request)
         return res
 
 
-class SetNewPassword(generics.GenericAPIView):
+class SetNewPasswordAPIView(generics.GenericAPIView):
     serializer_class = serializers.NewPasswordSerializer
 
     def post(self, request):
@@ -89,7 +89,7 @@ class SetNewPassword(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class UserDetailView(generics.GenericAPIView):
+class UserDetailAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.UserDetailSerializer
 
@@ -98,9 +98,10 @@ class UserDetailView(generics.GenericAPIView):
         return Response(serializer.data)
 
 
-class UserUpdateView(generics.GenericAPIView):
+class UserUpdateAPIView(generics.GenericAPIView):
     serializer_class = serializers.UserUpdateSerializer
     permission_classes = [IsAuthenticated]
+
     def patch(self, request):
         data = self.serializer_class.validate(serializers.UserUpdateSerializer(), request.data)
         user = User.objects.get(id=request.user.id)
@@ -112,3 +113,17 @@ class UserUpdateView(generics.GenericAPIView):
         user.save()
 
         return Response(data)
+
+
+class AddEmployeeAPIView(generics.GenericAPIView):
+    serializer_class = serializers.AddEmployeeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if request.user.type != 'admin':
+            return Response({'message': 'for creating an employee you must be admin for some company'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

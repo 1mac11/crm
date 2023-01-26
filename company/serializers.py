@@ -6,9 +6,10 @@ class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Company
-        fields = ('id', 'name', 'email', 'phone', 'owner')
+        fields = ('id', 'name', 'email', 'phone', 'owner', 'employee')
         extra_kwargs = {
-            'owner': {'read_only': True}
+            'owner': {'read_only': True},
+            'employee': {'read_only': True}
         }
 
     def validate(self, attrs):
