@@ -17,5 +17,8 @@ urlpatterns = [
     path('user_detail', views.UserDetailAPIView.as_view(), name="user_detail"),
     path('user_update', views.UserUpdateAPIView.as_view(), name="user_update"),
     path('add_employee', views.AddEmployeeAPIView.as_view(), name="add_employee"),
+    path('get_employees/<int:pk>', views.GetAllCompanyEmployeesAPIView.as_view(), name="get_employees"),
+    path('delete_employees', views.DeleteEmployeesAPIView.as_view(), name="delete_employees"),
+
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

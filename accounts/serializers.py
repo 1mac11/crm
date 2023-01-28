@@ -1,4 +1,3 @@
-from rest_framework import serializers
 from company.models import Company
 from .models import User
 from django.contrib import auth
@@ -146,8 +145,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         valid_email(attrs.get('email'))
         valid_username(attrs.get('username'))
         valid_phone_number(attrs.get('phone'))
-        valid_first_or_last_name(attrs.get('first_name'))
-        valid_first_or_last_name(attrs.get('last_name'))
+        valid_name(attrs.get('first_name'))
+        valid_name(attrs.get('last_name'))
 
         return attrs
 
@@ -194,3 +193,18 @@ class AddEmployeeSerializer(serializers.ModelSerializer):
         instance.save()
         company.employee.add(instance)
         return instance
+
+
+class GetAllCompanyEmployeesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'phone', 'email', 'type']
+
+
+class DeleteEmployeesSerializer(serializers.ModelSerializer):
+    company_id = serializers.CharField(max_length=4)
+    ids = serializers.ListField()
+
+    class Meta:
+        model = User
+        fields = ['ids', 'company_id']

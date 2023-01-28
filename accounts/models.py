@@ -5,7 +5,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import send_mail
 from config import settings
 
-EMPLOYEE_TYPE = (
+USER_TYPE = (
     ("admin", "admin"),
     ("employee", "employee"),
 )
@@ -19,7 +19,7 @@ class User(AbstractUser):
     photo = models.ImageField(null=True, blank=True)
     email_verified = models.BooleanField(default=False)
     verification_code = models.CharField(max_length=10, null=True, blank=True)
-    type = models.CharField(max_length=10, choices=EMPLOYEE_TYPE, default='admin')
+    type = models.CharField(max_length=10, choices=USER_TYPE, default='admin')
 
     def set_code(self):
         random_number = random.randint(1000, 9999)

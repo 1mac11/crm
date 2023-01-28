@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.core.validators import validate_email
 
 
-def valid_first_or_last_name(name):
+def valid_name(name):
     if not name.isalpha():
         raise serializers.ValidationError('Your first_name or last_name has not alphabetic symbols')
     return True
