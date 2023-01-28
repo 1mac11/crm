@@ -1,31 +1,25 @@
-from django.core.mail import send_mail
-from rest_framework import generics, status, views, permissions
+from rest_framework import generics, status, views, permissions, viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 
+from company.models import Company
 from .models import User
-from .serializers import RegisterSerializer, LoginSerializer, LogoutSerializer, VerifyEmailSerializer, \
-    VerificationCodeCheckSerializer
+from accounts import serializers
+from .permissions import IsOwner
 
-
-# Create your views here.
 
 class RegisterView(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
+    serializer_class = serializers.RegisterSerializer
 
     def post(self, request):
-        user = request.data
-        serializer = self.serializer_class(data=user)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        user_data = serializer.data
-        return Response(user_data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(generics.GenericAPIView):
-    serializer_class = LoginSerializer
+    serializer_class = serializers.LoginSerializer
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -34,9 +28,8 @@ class LoginAPIView(generics.GenericAPIView):
 
 
 class LogoutAPIView(generics.GenericAPIView):
-    serializer_class = LogoutSerializer
-
-    # permission_classes = (permissions.IsAuthenticated,)  # Elbekdan so'rimiz
+    serializer_class = serializers.LogoutSerializer
+    permission_classes = (permissions.IsAuthenticated,)  # Elbekdan so'rimiz
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -45,24 +38,16 @@ class LogoutAPIView(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
-
-class VerifyEmail(generics.GenericAPIView):
-    serializer_class = VerifyEmailSerializer
+class VerifyEmailAPIView(generics.GenericAPIView):
+    serializer_class = serializers.VerifyEmailSerializer
 
     def post(self, request):
         email = request.data.get('email')
         if email in User.objects.values_list('email', flat=True):
-            user = User.objects.get(email='user@example.com')
+            user = User.objects.get(email=email)
+            user.set_code()
 
-            # send mail to user.email
-            # send_mail(
-            #     'Verification code',
-            #     f'{user.verification_code}',
-            #     'from@example.com',
-            #     [f'{email}'],
-            #     fail_silently=False,
-            # )
+            # send mail to user.email not implemented yet
 
             return Response({f'{email}': 'exists',
                              'message': 'Please check your email adress for verification code'},
@@ -73,27 +58,115 @@ class VerifyEmail(generics.GenericAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class VerificationCodeCheck(generics.GenericAPIView):
-    serializer_class = VerificationCodeCheckSerializer
+class VerificationCodeCheckAPIView(generics.GenericAPIView):
+    serializer_class = serializers.VerificationCodeCheckSerializer
 
     def post(self, request):
-        user = request.user
+        email = request.data.get('email')
+        user = User.objects.get(email=email)
+
         if request.data.get('code') == user.verification_code:
             user.email_verified = True
-            """"""
+            user.verification_code = ''
+            user.save()
             return Response({'user': 'verified'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'incorrect code'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def password_reset(request):
-    data = request.data
-    if data['password'] == data['password_confirm']:
+class ForgotPasswordAPIView(generics.GenericAPIView):
+    serializer_class = serializers.ForgotPasswordSerializer
+
+    def post(self, request):
+        res = VerifyEmailAPIView().post(request)
+        return res
+
+
+class SetNewPasswordAPIView(generics.GenericAPIView):
+    serializer_class = serializers.NewPasswordSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class UserDetailAPIView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.UserDetailSerializer
+
+    def get(self, request):
+        serializer = serializers.UserDetailSerializer(request.user)
+        return Response(serializer.data)
+
+
+class UserUpdateAPIView(generics.GenericAPIView):
+    serializer_class = serializers.UserUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        data = self.serializer_class.validate(serializers.UserUpdateSerializer(), request.data)
+        user = User.objects.get(id=request.user.id)
+        for attr in data:
+            if attr == 'email' and data['email'] != user.email:
+                user.email_verified = False
+            user.__setattr__(attr, data[attr])
+
+        user.save()
+
+        return Response(data)
+
+
+class AddEmployeeAPIView(generics.GenericAPIView):
+    serializer_class = serializers.AddEmployeeSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+
+    def post(self, request):
+        if request.user.type != 'admin':
+            return Response({'message': 'for creating an employee you must be admin for some company'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class GetAllCompanyEmployeesAPIView(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = serializers.GetAllCompanyEmployeesSerializer
+
+    def get(self, request, *args, **kwargs):
+        company_id = kwargs.get('pk')
         user = request.user
-        user = User.objects.get(id=user.id)
-        user.password = data['password']
-        return Response({"message": "You successfully changed your password"}, status=200)
-    else:
-        return Response({"message": "Please chech that the new password and password confirmation are the same"},
-                        status=400)
+        company = Company.objects.get(id=company_id)
+        if user == company.owner or user in company.employee.filter(type='admin'):
+            # self.queryset = company.employee.all()
+            # print(self.queryset)
+            serializer = self.serializer_class(company.employee.all(), many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'for getting a list of employees you must be owner or admin for this company'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteEmployeesAPIView(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = serializers.DeleteEmployeesSerializer
+
+    def post(self, request):
+        company_id = request.data.get('company_id')
+        company = Company.objects.get(id=company_id)
+        # print(request.data)
+        if company.owner == request.user:
+            user_ids = request.data.get('ids')  # [1,2,3] List of ID's
+            # print(user_ids)
+            users = User.objects.filter(id__in=user_ids)
+            users = users.filter(type='employee')
+            for user in users:
+                user.delete()
+                user.save()
+            return Response({'message': 'Users deleted successfully'}, status=status.HTTP_200_OK)
+
+        else:
+            return Response({'message': 'You are not owner of this company'}, status=status.HTTP_400_BAD_REQUEST)
