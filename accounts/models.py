@@ -36,10 +36,7 @@ class User(AbstractUser):
         )
 
     def __str__(self):
-        fname = self.get_full_name()
-        if fname:
-            return fname
-        return self.username
+        return self.get_full_name() if self.get_full_name() else self.username
 
     def tokens(self):
         refresh = RefreshToken.for_user(self)

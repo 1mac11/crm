@@ -9,7 +9,8 @@ class CompanyAdmin(admin.ModelAdmin):
     ordering = ['id']
     list_display_links = ('id', 'name')
     search_fields = ('name',)
-    # list_filter = ('name',)
+    filter_horizontal = ('employee',)
+    autocomplete_fields = ('owner',)
 
 
 class LocationAdmin(admin.ModelAdmin):
@@ -18,6 +19,8 @@ class LocationAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
     search_fields = ('name', 'address')
     list_filter = ('company',)
+    filter_horizontal = ('employee',)
+    autocomplete_fields = ('company',)
 
     def company_owner(self, obj):
         return f'{obj.company.owner} id={obj.company.owner.id}'
@@ -30,6 +33,7 @@ class LocationImagesAdmin(admin.ModelAdmin):
     search_fields = ('name', 'location')
     list_filter = ('location',)
     readonly_fields = ('get_html_photo',)
+    autocomplete_fields = ('location',)
 
     def get_html_photo(self, obj):
         if obj.image:

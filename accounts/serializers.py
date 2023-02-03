@@ -37,7 +37,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=68, min_length=1, write_only=True)
-    username = serializers.CharField(max_length=255, min_length=3)
+    username_or_email = serializers.CharField(max_length=255, min_length=3, write_only=True)
     tokens = serializers.SerializerMethodField()
 
     def get_tokens(self, obj):
@@ -49,17 +49,32 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['password', 'username', 'tokens']
+        fields = ['password', 'username_or_email', 'tokens']
 
     def validate(self, attrs):
-        username = attrs.get('username', '')
+
         password = attrs.get('password', '')
-        user = auth.authenticate(username=username, password=password)
+        username_or_email = attrs.pop('username_or_email')
+
+        if '@' in username_or_email:
+            email = username_or_email
+            user = User.objects.get(email=email)
+            username = user.username
+        else:
+            username = username_or_email
+            user = User.objects.get(username=username)
+
+        if user.email_verified:
+            user = auth.authenticate(username=username, password=password)
+        else:
+            raise AuthenticationFailed('For log in you must verify your email')
+
         if not user:
             raise AuthenticationFailed('Invalid credentials, try again')
         if not user.is_active:
             raise AuthenticationFailed('Account disabled, contact admin')
         return {
+            'id': user.id,
             'email': user.email,
             'username': user.username,
             'tokens': user.tokens
