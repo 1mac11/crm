@@ -1,10 +1,11 @@
 from django.urls import path, include
 from rest_framework import routers
-from company import views
+from location import views
 
 router = routers.DefaultRouter()
 
-router.register(r'', views.CompanyViewSet)
+router.register(r'location', views.LocationViewSet)
+router.register(r'location_images', views.LocationImagesViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
