@@ -13,6 +13,7 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     filter_horizontal = ('employee',)
     autocomplete_fields = ('owner',)
+    list_per_page = 50  # No of records per page
 
 
 admin.site.register(Company, CompanyAdmin)

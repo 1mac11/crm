@@ -1,9 +1,10 @@
-from rest_framework import viewsets, generics, status
+from rest_framework import viewsets
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Company, Location, LocationImages
+from accounts.views import Pagination10To100
+from .models import Location, LocationImages
 from .serializers import LocationSerializer, LocationImagesSerializer
 from .permissions import IsLocationOwner, IsLocationImagesOwner
 
@@ -12,6 +13,7 @@ class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()
     permission_classes = [IsAuthenticated, IsLocationOwner]
     serializer_class = LocationSerializer
+    pagination_class = Pagination10To100
     http_method_names = ('get', 'post', 'patch', 'delete')
 
     def list(self, request, *args, **kwargs):
@@ -30,6 +32,7 @@ class LocationImagesViewSet(viewsets.ModelViewSet):
     queryset = LocationImages.objects.all()
     permission_classes = [IsAuthenticated, IsLocationImagesOwner]
     serializer_class = LocationImagesSerializer
+    pagination_class = Pagination10To100
     http_method_names = ('get', 'post', 'patch', 'delete')
     parser_classes = (FormParser, MultiPartParser)
 
