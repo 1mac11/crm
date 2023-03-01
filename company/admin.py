@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from rest_framework.authtoken.models import TokenProxy
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
-from .models import Company
+from .models import Company, Product
 
 
 class CompanyAdmin(admin.ModelAdmin):
@@ -16,7 +16,16 @@ class CompanyAdmin(admin.ModelAdmin):
     list_per_page = 50  # No of records per page
 
 
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'company', 'available', 'price')
+    ordering = ['id']
+    list_display_links = ('id', 'name')
+    search_fields = ('name',)
+    list_per_page = 50  # No of records per page
+
+
 admin.site.register(Company, CompanyAdmin)
+admin.site.register(Product, ProductAdmin)
 admin.site.unregister(Group)
 admin.site.unregister(TokenProxy)
 admin.site.unregister(BlacklistedToken)

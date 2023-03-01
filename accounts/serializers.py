@@ -222,3 +222,9 @@ class DeleteEmployeesSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['ids', 'company_id']
+
+
+class UserDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name']

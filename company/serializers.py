@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import Company
+
+from location.models import Location
+from .models import Company, Product
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -23,3 +25,32 @@ class CompanySerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    company_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name', 'available', 'price', 'count', 'company_id', 'locations')
+        extra_kwargs = {
+            'available': {'read_only': True},
+        }
+
+    def validate(self, attrs):
+        company_id = attrs.get('company_id')
+        company = Company.objects.get(id=company_id)
+        locations = attrs.get('locations')
+
+        company_locations = Location.objects.filter(company=company)
+
+        for location in locations:
+            if not location in company_locations:
+                raise serializers.ValidationError(
+                    f'The location with id={location.id} is not location of company {company.name}')
+
+        return attrs
+
+
+class CompanyDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = ('name',)
