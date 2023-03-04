@@ -6,17 +6,15 @@ from .models import Product
 from channels.layers import get_channel_layer
 
 
-@receiver(pre_save, sender=Product)
-def send_message(sender, instance, **kwargs):
-    print(Product.objects.get(pk=instance.pk))
-
+# @receiver(pre_save, sender=Product)
+# def send_message(sender, instance, **kwargs):
+#     print(Product.objects.get(pk=instance.pk))
 
 @receiver(post_save, sender=Product)
 def send_message(sender, instance, created, **kwargs):
-    print(instance)
-
     action = 'created' if created else 'updated'
 
-    async_to_sync(get_channel_layer().group_send)('notifications',
-                                                  {"type": "product_changed",
-                                                   'data': {'instance': instance, 'action': action}})
+    async_to_sync(get_channel_layer().group_send)(
+        f"{instance.company.owner.id}-notifications", {"type": "send_last_message",
+                                                       "text": f'{instance} {action}'}
+    )

@@ -31,21 +31,20 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'name', 'available', 'price', 'count', 'company_id', 'locations')
-        extra_kwargs = {
-            'available': {'read_only': True},
-        }
 
     def validate(self, attrs):
-        company_id = attrs.get('company_id')
-        company = Company.objects.get(id=company_id)
-        locations = attrs.get('locations')
+        company_id = attrs.get('company_id', '')
+        if company_id:
+            company = Company.objects.get(id=company_id)
 
-        company_locations = Location.objects.filter(company=company)
+        locations = attrs.get('locations', '')
+        if locations and company_id:
+            company_locations = Location.objects.filter(company=company)
 
-        for location in locations:
-            if not location in company_locations:
-                raise serializers.ValidationError(
-                    f'The location with id={location.id} is not location of company {company.name}')
+            for location in locations:
+                if not location in company_locations:
+                    raise serializers.ValidationError(
+                        f'The location with id={location.id} is not location of company {company.name}')
 
         return attrs
 

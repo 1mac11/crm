@@ -62,7 +62,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         return s
 
-    def update(self, request, *args, **kwargs):
+    def partial_update(self, request, *args, **kwargs):
 
         user = request.user
         new_data = request.data
@@ -73,4 +73,4 @@ class ProductViewSet(viewsets.ModelViewSet):
                                      description=f'user {user} tried to change product {product} data, {changed_data}',
                                      company=product.company)
 
-        return super().update(request, *args, **kwargs)
+        return super().partial_update(request, *args, **kwargs)
