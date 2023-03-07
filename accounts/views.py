@@ -173,6 +173,7 @@ class DeleteEmployeesAPIView(generics.GenericAPIView):
             users = users.filter(type='employee')
             for user in users:
                 user.delete()
+
             return Response({'message': 'Your company employees deleted successfully'}, status=status.HTTP_200_OK)
 
         else:
