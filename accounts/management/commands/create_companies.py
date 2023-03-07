@@ -10,12 +10,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         count = kwargs['count']
-        for i in range(count):
-            company = Company.objects.create(name=f'company{i + 1}',
-                                             owner_id=1,
-                                             phone='998999698757',
-                                             email=f'company{i + 1}@gmail.com'
-                                             )
-            company.employee.add()
+        Company.objects.bulk_create(
+            [Company(name=f'company{i + 1}',
+                     email=f'company{i + 1}@gmail.com',
+                     phone=f'9989996987{i + 1}',
+                     owner_id=1) for i in range(count)]
+        )
 
         print(f'Created {count} test Companies')

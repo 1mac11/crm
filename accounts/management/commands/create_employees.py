@@ -10,10 +10,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         count = kwargs['count']
-        for i in range(count):
-            User.objects.create_user(username=f'employee{i + 1}',
-                                     email=f'employee{i + 1}@gmail.com',
-                                     password='password',
-                                     type='employee')
+        User.objects.bulk_create(
+            [User(username=f'employee{i + 1}',
+                  email=f'employee{i + 1}@gmail.com',
+                  password='password',
+                  type='employee') for i in range(count)])
 
         print(f'Created {count} test employees')

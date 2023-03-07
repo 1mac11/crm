@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from accounts.views import Pagination10To100
 from .models import Company
 from .serializers import CompanySerializer
 from .permissions import IsOwner
@@ -11,6 +12,7 @@ class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
     permission_classes = [IsOwner, IsAuthenticated]
     serializer_class = CompanySerializer
+    pagination_class = Pagination10To100
     http_method_names = ('get', 'post', 'patch', 'delete')
 
     def list(self, request, *args, **kwargs):

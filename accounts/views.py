@@ -1,4 +1,5 @@
 from rest_framework import generics, status, views, permissions, viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
@@ -132,19 +133,26 @@ class AddEmployeeAPIView(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class GetAllCompanyEmployeesAPIView(generics.GenericAPIView):
+class Pagination10To100(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+class GetAllCompanyEmployeesAPIView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = serializers.GetAllCompanyEmployeesSerializer
+    pagination_class = Pagination10To100
+    http_method_names = ('get',)
 
     def get(self, request, *args, **kwargs):
         company_id = kwargs.get('pk')
         user = request.user
         company = Company.objects.get(id=company_id)
+
         if user == company.owner or user in company.employee.filter(type='admin'):
-            # self.queryset = company.employee.all()
-            # print(self.queryset)
-            serializer = self.serializer_class(company.employee.all(), many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            self.queryset = company.employee.all()
+            return super().get(self, request, *args, **kwargs)
         else:
             return Response({'message': 'for getting a list of employees you must be owner or admin for this company'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -165,8 +173,7 @@ class DeleteEmployeesAPIView(generics.GenericAPIView):
             users = users.filter(type='employee')
             for user in users:
                 user.delete()
-                user.save()
-            return Response({'message': 'Users deleted successfully'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Your company employees deleted successfully'}, status=status.HTTP_200_OK)
 
         else:
             return Response({'message': 'You are not owner of this company'}, status=status.HTTP_400_BAD_REQUEST)

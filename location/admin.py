@@ -12,6 +12,7 @@ class LocationAdmin(admin.ModelAdmin):
     list_filter = ('company',)
     filter_horizontal = ('employee',)
     autocomplete_fields = ('company',)
+    list_per_page = 50  # No of records per page
 
     def company_owner(self, obj):
         return f'{obj.company.owner} id={obj.company.owner.id}'

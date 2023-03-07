@@ -11,6 +11,7 @@ class UserAdmin(admin.ModelAdmin):
     readonly_fields = ('email_verified', 'type', 'verification_code', 'photo',
                        'date_joined', 'last_login', 'is_staff', 'is_active', 'is_superuser')
     exclude = ('password', 'groups', 'user_permissions')
+    list_per_page = 50  # No of records per page
 
 
 admin.site.register(User, UserAdmin)
