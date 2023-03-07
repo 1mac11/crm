@@ -7,8 +7,10 @@ class UserAdmin(admin.ModelAdmin):
     ordering = ['id']
     list_display_links = ('id', 'username')
     search_fields = ('username', 'first_name', 'last_name')
-    list_editable = ('email_verified',)
     list_filter = ('email_verified', 'type')
+    readonly_fields = ('email_verified', 'type', 'verification_code', 'photo',
+                       'date_joined', 'last_login', 'is_staff', 'is_active', 'is_superuser')
+    exclude = ('password', 'groups', 'user_permissions')
 
 
 admin.site.register(User, UserAdmin)
