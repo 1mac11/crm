@@ -2,8 +2,8 @@ import random
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.core.mail import send_mail
 from config import settings
+from .utils import send_email
 
 USER_TYPE = (
     ("admin", "admin"),
@@ -25,14 +25,13 @@ class User(AbstractUser):
         random_number = random.randint(1000, 9999)
         self.verification_code = random_number
         self.save()
-        print(self)
-        print(self.verification_code)
-        send_mail(
+        # print(self)
+        # print(self.verification_code)
+        send_email(
             'Your verification code',
             f'{self.verification_code}',
             settings.FROM_EMAIL,
             [f'{self.email}'],
-            fail_silently=False,
         )
 
     def __str__(self):
