@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from config import settings
 from .utils import send_email
+from django.utils.translation import gettext_lazy as _
 
 USER_TYPE = (
     ("admin", "admin"),
@@ -12,14 +13,14 @@ USER_TYPE = (
 
 
 class User(AbstractUser):
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
-    phone = models.CharField(max_length=20, blank=True)
-    email = models.EmailField(unique=True)
-    photo = models.ImageField(null=True, blank=True)
-    email_verified = models.BooleanField(default=False)
-    verification_code = models.CharField(max_length=10, null=True, blank=True)
-    type = models.CharField(max_length=10, choices=USER_TYPE, default='admin')
+    first_name = models.CharField(_('first_name'), max_length=150, blank=True)
+    last_name = models.CharField(_('last_name'), max_length=150, blank=True)
+    phone = models.CharField(_('phone'), max_length=20, blank=True)
+    email = models.EmailField(_('email'), unique=True)
+    photo = models.ImageField(_('photo'), null=True, blank=True)
+    email_verified = models.BooleanField(_('email verified'), default=False)
+    verification_code = models.CharField(_('verification code'), max_length=10, null=True, blank=True)
+    type = models.CharField(_('type'), max_length=10, choices=USER_TYPE, default='admin')
 
     def set_code(self):
         random_number = random.randint(1000, 9999)
@@ -43,3 +44,7 @@ class User(AbstractUser):
             'refresh': str(refresh),
             'access': str(refresh.access_token)
         }
+
+    class Meta:
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')

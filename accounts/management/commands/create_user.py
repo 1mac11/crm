@@ -20,6 +20,7 @@ class Command(BaseCommand):
             User.objects.create_user(username=username,
                                      email=email,
                                      password=password,
+                                     email_verified=True,
                                      is_superuser=True,
                                      is_staff=True)
             user = User.objects.get(username=username)
