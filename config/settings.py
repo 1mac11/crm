@@ -103,7 +103,7 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     'default': env.db('DATABASE_URL',
-                      default='postgres://crm_user:supersecretpassword@localhost:5434/crm_db'),
+                      default='postgres://postgres:1699@localhost:5432/crm_db'),
 }
 
 # Password validation

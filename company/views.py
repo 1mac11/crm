@@ -47,7 +47,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        pk = request.data.get('company')
+        pk = request.data.get('company_id')
         company = Company.objects.get(id=pk)
         if request.user != company.owner:
             return Response({'message': 'Only owner of company can create the new product'},

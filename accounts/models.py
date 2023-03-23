@@ -26,8 +26,7 @@ class User(AbstractUser):
         random_number = random.randint(1000, 9999)
         self.verification_code = random_number
         self.save()
-        # print(self)
-        # print(self.verification_code)
+        print(self.verification_code)
         send_email(
             'Your verification code',
             f'{self.verification_code}',

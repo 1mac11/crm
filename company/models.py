@@ -21,15 +21,11 @@ class Company(models.Model):
         verbose_name_plural = _("Companies")
 
 
-from location.models import Location
-
-
 class Product(models.Model):
     name = models.CharField(unique=True, max_length=30, verbose_name=_('product name'))
     price = models.DecimalField(decimal_places=2, max_digits=20, verbose_name=_('price'))
     company = models.ForeignKey(Company, on_delete=models.DO_NOTHING, verbose_name=_('company'))
     image = models.ImageField(blank=True, null=True, verbose_name=_('image'))
-    locations = models.ManyToManyField(Location, default=None, blank=True, verbose_name=_('locations'))
     count = models.IntegerField(verbose_name=_('count'))
     available = models.BooleanField(default=False, verbose_name=_('available'))
 
