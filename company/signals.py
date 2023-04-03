@@ -1,6 +1,6 @@
-from asgiref.sync import async_to_sync, sync_to_async
+from asgiref.sync import async_to_sync
 from asyncio.log import logger
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .alerter import Alerter
 
