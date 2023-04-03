@@ -98,6 +98,18 @@ CHANNEL_LAYERS = {
   }
 }
 
+# CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_RESULT_BACKEND = 'db+postgresql://postgres:1699@localhost:5432/crm_db'
+#
+# CELERY_TIMEZONE = 'Asia/Tashkent'
+# CELERY_BEAT_SCHEDULE = {
+#     'add-every-30-seconds': {
+#         'task': 'tasks.add',
+#         'schedule': 30.0,
+#         'args': (16, 16)
+#     },
+# }
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -129,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
