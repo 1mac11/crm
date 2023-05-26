@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'location',
     'search',
     'websocket',
+    'clients',
 
 ]
 
