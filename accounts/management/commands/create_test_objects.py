@@ -47,7 +47,7 @@ class Command(BaseCommand):
             compani.employee.add(*employees)
             j += 1
 
-        print(f'Added {employee} employees for {company} companies')
+        print(f'Added {employee} employees for {company * user} companies')
 
         Location.objects.bulk_create(
             [Location(name=f'location{i + 1}',
