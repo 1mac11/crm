@@ -7,5 +7,6 @@ router = routers.DefaultRouter()
 router.register(r'', views.ClientsViewSet)
 
 urlpatterns = [
+    path('myclients/', views.MyClientsListView.as_view(), name='myclients'),
     path('', include(router.urls)),
 ]
