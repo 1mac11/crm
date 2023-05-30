@@ -1,0 +1,161 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-08 19:53+0500\n"
+"PO-Revision-Date: 2023-02-07 07:31+0000\n"
+"Last-Translator:   <admin@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: accounts/apps.py:8
+msgid "accounts"
+msgstr "аккаунты"
+
+#: accounts/models.py:16
+msgid "first_name"
+msgstr "имя"
+
+#: accounts/models.py:17
+msgid "last_name"
+msgstr "фамилия"
+
+#: accounts/models.py:18 company/models.py:10
+msgid "phone"
+msgstr "телефон"
+
+#: accounts/models.py:19 company/models.py:11
+msgid "email"
+msgstr "email"
+
+#: accounts/models.py:20
+msgid "photo"
+msgstr "фото"
+
+#: accounts/models.py:21
+msgid "email verified"
+msgstr "email подтвержден"
+
+#: accounts/models.py:22
+msgid "verification code"
+msgstr "код подтверждения"
+
+#: accounts/models.py:23
+msgid "type"
+msgstr "тип"
+
+#: accounts/models.py:49
+msgid "User"
+msgstr "Ползователь"
+
+#: accounts/models.py:50
+msgid "Users"
+msgstr "Пользователи"
+
+#: company/apps.py:8
+msgid "company"
+msgstr "Компания"
+
+#: company/models.py:8 location/models.py:8
+msgid "name"
+msgstr "название"
+
+#: company/models.py:9
+msgid "company_owner"
+msgstr "Владелец компании"
+
+#: company/models.py:12 location/models.py:11
+msgid "employee"
+msgstr "работники"
+
+#: company/models.py:13
+msgid "logo"
+msgstr "логотип"
+
+#: company/models.py:19
+msgid "Company"
+msgstr "Компанию"
+
+#: company/models.py:20
+msgid "Companies"
+msgstr "Компании"
+
+#: config/settings.py:119
+msgid "English"
+msgstr "Английский"
+
+#: config/settings.py:120
+msgid "Russian"
+msgstr "Русский"
+
+#: config/settings.py:121
+msgid "Uzbek"
+msgstr "Узбекский"
+
+#: config/urls.py:41
+msgid "admin/"
+msgstr ""
+
+#: location/admin.py:21
+msgid "Company owner"
+msgstr "Владелец компании"
+
+#: location/admin.py:38 location/models.py:24
+msgid "image"
+msgstr "Изображение"
+
+#: location/admin.py:44
+msgid "company of location"
+msgstr "компания локации"
+
+#: location/admin.py:49
+msgid "location company owner"
+msgstr "Владелец компании локации"
+
+#: location/apps.py:8 location/models.py:23
+msgid "location"
+msgstr "локация"
+
+#: location/models.py:9
+msgid "address"
+msgstr "адрес"
+
+#: location/models.py:10
+msgid "location company"
+msgstr "Компания локации"
+
+#: location/models.py:17
+msgid "Location"
+msgstr "локация"
+
+#: location/models.py:18
+msgid "Locations"
+msgstr "локации"
+
+#: location/models.py:22
+msgid "title"
+msgstr "название"
+
+#: location/models.py:30
+msgid "Location Image"
+msgstr "Изображение локации"
+
+#: location/models.py:31
+msgid "Location Images"
+msgstr "Изображения локации"
+
+#~ msgid "owner"
+#~ msgstr "владелец"

@@ -1,0 +1,159 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-08 19:53+0500\n"
+"PO-Revision-Date: 2023-02-07 07:31+0000\n"
+"Last-Translator:   <admin@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Translated-Using: django-rosetta 0.9.8\n"
+
+#: accounts/apps.py:8
+msgid "accounts"
+msgstr "Akkauntlar"
+
+#: accounts/models.py:16
+msgid "first_name"
+msgstr "Ismi"
+
+#: accounts/models.py:17
+msgid "last_name"
+msgstr "familiyasi"
+
+#: accounts/models.py:18 company/models.py:10
+msgid "phone"
+msgstr "telefon"
+
+#: accounts/models.py:19 company/models.py:11
+msgid "email"
+msgstr "email"
+
+#: accounts/models.py:20
+msgid "photo"
+msgstr "rasmi"
+
+#: accounts/models.py:21
+msgid "email verified"
+msgstr "email tasdiqlangan"
+
+#: accounts/models.py:22
+msgid "verification code"
+msgstr "tasdiqlash ko'di"
+
+#: accounts/models.py:23
+msgid "type"
+msgstr "turi"
+
+#: accounts/models.py:49
+msgid "User"
+msgstr "Foydalanuvchi"
+
+#: accounts/models.py:50
+msgid "Users"
+msgstr "Foydalanuvchilar"
+
+#: company/apps.py:8
+msgid "company"
+msgstr "Kompaniya"
+
+#: company/models.py:8 location/models.py:8
+msgid "name"
+msgstr "nomi"
+
+#: company/models.py:9
+msgid "company_owner"
+msgstr "Kompaniya egasi"
+
+#: company/models.py:12 location/models.py:11
+msgid "employee"
+msgstr "ishchilar"
+
+#: company/models.py:13
+msgid "logo"
+msgstr "logotip"
+
+#: company/models.py:19
+msgid "Company"
+msgstr "Kompaniya"
+
+#: company/models.py:20
+msgid "Companies"
+msgstr "Kompaniyalar"
+
+#: config/settings.py:119
+msgid "English"
+msgstr "Inglizcha"
+
+#: config/settings.py:120
+msgid "Russian"
+msgstr "Ruscha"
+
+#: config/settings.py:121
+msgid "Uzbek"
+msgstr "Uzbekcha"
+
+#: config/urls.py:41
+msgid "admin/"
+msgstr ""
+
+#: location/admin.py:21
+msgid "Company owner"
+msgstr "Kompaniya egasi"
+
+#: location/admin.py:38 location/models.py:24
+msgid "image"
+msgstr "rasm"
+
+#: location/admin.py:44
+msgid "company of location"
+msgstr "lokatsiya kompaniyasi"
+
+#: location/admin.py:49
+msgid "location company owner"
+msgstr "Lokatsiya kompaniyasi egasi"
+
+#: location/apps.py:8 location/models.py:23
+msgid "location"
+msgstr "lokatsiya"
+
+#: location/models.py:9
+msgid "address"
+msgstr "manzil"
+
+#: location/models.py:10
+msgid "location company"
+msgstr "Lokatsiya kompaniyasi"
+
+#: location/models.py:17
+msgid "Location"
+msgstr "lokatsiya"
+
+#: location/models.py:18
+msgid "Locations"
+msgstr "lokatsiyalar"
+
+#: location/models.py:22
+msgid "title"
+msgstr "sarlavha"
+
+#: location/models.py:30
+msgid "Location Image"
+msgstr "lokatsiya rasmi"
+
+#: location/models.py:31
+msgid "Location Images"
+msgstr "lokatsiya rasmlari"
+
+#~ msgid "owner"
+#~ msgstr "egasi"

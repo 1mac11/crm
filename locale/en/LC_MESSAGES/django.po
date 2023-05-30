@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-08 19:53+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/apps.py:8
+msgid "accounts"
+msgstr ""
+
+#: accounts/models.py:16
+msgid "first_name"
+msgstr ""
+
+#: accounts/models.py:17
+msgid "last_name"
+msgstr ""
+
+#: accounts/models.py:18 company/models.py:10
+msgid "phone"
+msgstr ""
+
+#: accounts/models.py:19 company/models.py:11
+msgid "email"
+msgstr ""
+
+#: accounts/models.py:20
+msgid "photo"
+msgstr ""
+
+#: accounts/models.py:21
+msgid "email verified"
+msgstr ""
+
+#: accounts/models.py:22
+msgid "verification code"
+msgstr ""
+
+#: accounts/models.py:23
+msgid "type"
+msgstr ""
+
+#: accounts/models.py:49
+msgid "User"
+msgstr ""
+
+#: accounts/models.py:50
+msgid "Users"
+msgstr ""
+
+#: company/apps.py:8
+msgid "company"
+msgstr ""
+
+#: company/models.py:8 location/models.py:8
+msgid "name"
+msgstr ""
+
+#: company/models.py:9
+msgid "company_owner"
+msgstr ""
+
+#: company/models.py:12 location/models.py:11
+msgid "employee"
+msgstr ""
+
+#: company/models.py:13
+msgid "logo"
+msgstr ""
+
+#: company/models.py:19
+msgid "Company"
+msgstr ""
+
+#: company/models.py:20
+msgid "Companies"
+msgstr ""
+
+#: config/settings.py:119
+msgid "English"
+msgstr ""
+
+#: config/settings.py:120
+msgid "Russian"
+msgstr ""
+
+#: config/settings.py:121
+msgid "Uzbek"
+msgstr ""
+
+#: config/urls.py:41
+msgid "admin/"
+msgstr ""
+
+#: location/admin.py:21
+msgid "Company owner"
+msgstr ""
+
+#: location/admin.py:38 location/models.py:24
+msgid "image"
+msgstr ""
+
+#: location/admin.py:44
+msgid "company of location"
+msgstr ""
+
+#: location/admin.py:49
+msgid "location company owner"
+msgstr ""
+
+#: location/apps.py:8 location/models.py:23
+msgid "location"
+msgstr ""
+
+#: location/models.py:9
+msgid "address"
+msgstr ""
+
+#: location/models.py:10
+msgid "location company"
+msgstr ""
+
+#: location/models.py:17
+msgid "Location"
+msgstr ""
+
+#: location/models.py:18
+msgid "Locations"
+msgstr ""
+
+#: location/models.py:22
+msgid "title"
+msgstr ""
+
+#: location/models.py:30
+msgid "Location Image"
+msgstr ""
+
+#: location/models.py:31
+msgid "Location Images"
+msgstr ""
