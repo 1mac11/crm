@@ -18,6 +18,7 @@ class MyClientsListView(generics.GenericAPIView):
 
     def post(self, request):
         company_id = request.data.get('company_id')
+        # below we get the clients by comparing their bought_products' company ids with our company id
         clients = Clients.objects.filter(bought_products__company_id=company_id)
         serializer = serializers.ClientSerializer(clients, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
