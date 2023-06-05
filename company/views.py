@@ -1,10 +1,10 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status,generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from websocket.models import Notifications
 from accounts.views import Pagination10To100
 from .models import Company, Product
-from .serializers import CompanySerializer, ProductSerializer
+from .serializers import CompanySerializer, ProductSerializer, MyProductsSerializer
 from .permissions import IsOwner, IsCompanyOwnerOrEmployee
 
 
@@ -74,3 +74,15 @@ class ProductViewSet(viewsets.ModelViewSet):
                                      company=product.company)
 
         return super().partial_update(request, *args, **kwargs)
+
+
+class MyProductsListView(generics.GenericAPIView):
+    serializer_class = MyProductsSerializer
+    permission_classes = [IsCompanyOwnerOrEmployee, IsAuthenticated]
+
+    def post(self, request):
+        company_id = request.data.get('company_id')
+        # below we get the products related to exact company ids with our company id
+        clients = Product.objects.filter(company_id=company_id)
+        serializer = ProductSerializer(clients, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

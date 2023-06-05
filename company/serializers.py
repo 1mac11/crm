@@ -37,3 +37,7 @@ class CompanyDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = ('name',)
+
+
+class MyProductsSerializer(serializers.Serializer):
+    company_id = serializers.IntegerField(default=1)
