@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rosetta',
     'django_elasticsearch_dsl',
     'channels',
+    'django_filters',
 
     # My apps
     'accounts',
@@ -94,9 +95,9 @@ ASGI_APPLICATION = "config.asgi.application"
 # }
 
 CHANNEL_LAYERS = {
-  'default': {
-    'BACKEND': 'channels.layers.InMemoryChannelLayer'
-  }
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
 }
 
 # CELERY_BROKER_URL = 'amqp://localhost'
@@ -177,6 +178,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.User"
 
 REST_FRAMEWORK = {
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
 
