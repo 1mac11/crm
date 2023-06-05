@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from .models import Clients
 from clients import serializers
@@ -22,3 +23,10 @@ class MyClientsListView(generics.GenericAPIView):
         clients = Clients.objects.filter(bought_products__company_id=company_id)
         serializer = serializers.ClientSerializer(clients, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class FilteredClientsList(generics.ListAPIView):
+    queryset = Clients.objects.all()
+    serializer_class = serializers.ClientSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'surname', 'phone', 'email']
