@@ -9,4 +9,6 @@ django-rosetta~=0.9.8
 django-elasticsearch-dsl~=7.2.0
 psycopg2~=2.9.5
 pillow~=9.4.0
+django-filter~=23.2
+
 
