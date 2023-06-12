@@ -10,3 +10,10 @@ class ClientSerializer(serializers.ModelSerializer):
 
 class MyClientsSerializer(serializers.Serializer):
     company_id = serializers.IntegerField(default=1)
+
+
+class SendingEmailsSerializer(serializers.Serializer):
+    company_id = serializers.IntegerField()
+    title = serializers.CharField()
+    text = serializers.CharField()
+    from_email = serializers.CharField()
