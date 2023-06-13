@@ -16,6 +16,7 @@ class ClientFilter(FilterSet):
             'surname': ['icontains'],
             'phone': ['icontains'],
             'email': ['icontains'],
+            'bought_products__company_id': ['exact'],
 
         }
 
