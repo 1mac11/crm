@@ -13,3 +13,24 @@ class Clients(models.Model):
 
     def __str__(self):
         return self.name + self.surname
+
+
+APPLICATION_STATUS = (
+    ("accepted", "accepted"),
+    ("screening", "screening"),
+    ("rejected", "rejected"),
+    ("received", "received"),
+    ("on_process", "on_process"),
+    ("ready", "ready"),
+)
+
+
+class Application(models.Model):
+    client = models.ForeignKey(Clients, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    count = models.IntegerField()
+    deadline = models.DateTimeField()
+    status = models.CharField(choices=APPLICATION_STATUS, max_length=10)
+
+    def __str__(self):
+        return str(self.client) + 'wants to buy' + self.product.name
