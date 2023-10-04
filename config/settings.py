@@ -1,8 +1,9 @@
 import os
 from datetime import timedelta
-from django.utils.translation import gettext_lazy as _
-import environ
 from pathlib import Path
+
+import environ
+from django.utils.translation import gettext_lazy as _
 
 env = environ.Env(
     # set casting default value
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl',
     'channels',
     'django_filters',
+    'django_celery_results',
+    'django_celery_beat',
 
     # My apps
     'accounts',
@@ -100,17 +103,16 @@ CHANNEL_LAYERS = {
     }
 }
 
-# CELERY_BROKER_URL = 'amqp://localhost'
-# CELERY_RESULT_BACKEND = 'db+postgresql://postgres:1699@localhost:5432/crm_db'
-#
-# CELERY_TIMEZONE = 'Asia/Tashkent'
-# CELERY_BEAT_SCHEDULE = {
-#     'add-every-30-seconds': {
-#         'task': 'tasks.add',
-#         'schedule': 30.0,
-#         'args': (16, 16)
-#     },
-# }
+# CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = {'application/json'}
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Tashkent'
+CELERY_RESULT_BACKEND = 'django-db'
+
+#BEAT SETTINGS
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
