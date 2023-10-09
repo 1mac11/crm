@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import Clients
 from clients import serializers
 from .send_emails_to_clients import send_emails
+from .tasks import send_email_task
 
 
 class ClientFilter(FilterSet):
@@ -27,14 +28,15 @@ class SendingEmailsAPIView(generics.GenericAPIView):
     def post(self, request):
         company_id = request.data.get('company_id')
         title = request.data.get('title')
-        text = request.data.get('text')
-        from_email = request.data.get('from_email')
+        message = request.data.get('text')
+        # from_email = request.data.get('from_email')
 
         try:
-            send_emails(company_id, title, text, from_email)
+            send_email_task.delay(company_id, title, message, 'rajrajrajradju@gmail.com')
             return Response({'message': 'emails has been send succesfully'}, status=status.HTTP_200_OK)
         except Exception as e:
-            print(e)
+            print('ex:', e)
+            return Response({'message': 'sorry'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ClientsViewSet(viewsets.ModelViewSet):

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework_simplejwt.token_blacklist',
     'rosetta',
-    'django_elasticsearch_dsl',
+    # 'django_elasticsearch_dsl',
     'channels',
     'django_filters',
     'django_celery_results',
