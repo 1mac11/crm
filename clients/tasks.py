@@ -1,30 +1,17 @@
+from time import sleep
+
 from celery import shared_task
 from django.core.mail import send_mail
-from config import settings
 
 
-@shared_task(bind=True)
-def send_notification_mail(self, target_mail, message):
-    mail_subject = "Welcome on Board!"
+@shared_task()
+def send_email_task(message):
+    sleep(20)  # Simulate expensive operation(s) that freeze Django
+
     send_mail(
-        subject=mail_subject,
-        message=message,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[target_mail],
+        "Your Feedback",
+        f"\t{message}\n\nThank you!",
+        "support@example.com",
+        'email_addresses list',
         fail_silently=False,
     )
-    return "Done"
-
-
-@shared_task(bind=True)
-def send_ad_mails(self, message):
-    recipient_list = ["xxxx@gmail.com"]
-    mail_subject = "You are on your luck day!"
-    send_mail(
-        subject=mail_subject,
-        message=message,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=recipient_list,
-        fail_silently=False,
-    )
-    return "Done"
