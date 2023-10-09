@@ -20,3 +20,4 @@ def send_email_task(company_id, title, message, from_email):
         fail_silently=False,
     )
     # print('emails sent succesfully')
+    return "Done"

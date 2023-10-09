@@ -29,10 +29,10 @@ class SendingEmailsAPIView(generics.GenericAPIView):
         company_id = request.data.get('company_id')
         title = request.data.get('title')
         message = request.data.get('text')
-        # from_email = request.data.get('from_email')
+        from_email = request.data.get('from_email')
 
         try:
-            send_email_task.delay(company_id, title, message, 'rajrajrajradju@gmail.com')
+            send_email_task.delay(company_id, title, message, from_email)
             return Response({'message': 'emails has been send succesfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             print('ex:', e)
